@@ -1,0 +1,9 @@
+{
+  "name":"WA Games - WhatsApp Game Generator",
+  "short_name":"WA Games",
+  "start_url":".",
+  "display":"standalone",
+  "background_color":"#f4f7f5",
+  "theme_color":"#075E54",
+  "description":"Create configurable games to send through WhatsApp."
+}
