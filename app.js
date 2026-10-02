@@ -65,6 +65,22 @@ const BANK=[
   {t:'question',i:'playful',text:"Takealot cart or sneaker plug — where does your money go?"}
 ];
 
+/* Suggestive adult bank (18+, couple/crush). Tasteful innuendo — the API does the explicit end. */
+const ADULT=[
+  {t:'confession',i:'bold',text:"Confess the last thing you imagined us doing 😏"},
+  {t:'question',i:'bold',text:"What's the most attractive thing I do without realising?"},
+  {t:'voice',i:'bold',text:"Voice note: say something you'd only whisper in my ear"},
+  {t:'rating',i:'playful',text:"Rate how badly you want to see me this weekend, 1–10"},
+  {t:'choice',i:'bold',text:"Slow and teasing, or straight to the point?"},
+  {t:'question',i:'bold',text:"Where's the first place you'd kiss me?"},
+  {t:'confession',i:'chaos',text:"Confess a fantasy you've never said out loud"},
+  {t:'challenge',i:'bold',text:"Text me the spiciest thing you're comfortable sending right now"},
+  {t:'photo',i:'bold',text:"Send a photo showing off your favourite thing about yourself"},
+  {t:'question',i:'chaos',text:"Ubungenza ini ukube bendilapho manje? (What would you do if I were there right now?)"},
+  {t:'prediction',i:'bold',text:"Predict how our next date ends 👀"},
+  {t:'confession',i:'bold',text:"Confess: thinking about me more at day or at night?"}
+];
+
 /* ---------- helpers ---------- */
 function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast._);toast._=setTimeout(()=>t.classList.remove('show'),2200)}
 function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
@@ -88,23 +104,41 @@ function brief(){
     aud:$('#aud').value, level:$('#level').value,
     lang:$('#lang').value, count:+$('#count').value,
     note:$('#brief').value.trim(),
+    spice:($('#spice')||{}).value||'off',
     types:[...document.querySelectorAll('#types input:checked')].map(c=>c.value)
   };
 }
+function isAdult(spec){return spec.spice&&spec.spice!=='off'&&(spec.aud==='couple'||spec.aud==='crush')}
 function buildFromBank(spec){
-  let pool=BANK.filter(p=>spec.mode!=='mix'||!spec.types.length||spec.types.includes(p.t));
-  if(!pool.length)pool=BANK;
+  let pool;
+  if(isAdult(spec)){
+    pool=ADULT.concat(BANK.filter(p=>p.i==='bold'||p.i==='chaos'));
+    if(spec.mode==='mix'&&spec.types.length)pool=pool.filter(p=>spec.types.includes(p.t));
+    if(!pool.length)pool=ADULT;
+  }else{
+    pool=BANK.filter(p=>spec.mode!=='mix'||!spec.types.length||spec.types.includes(p.t));
+    if(!pool.length)pool=BANK;
+  }
   let out=shuffle(pool);
   while(out.length<spec.count)out=out.concat(shuffle(pool));
   return out.slice(0,spec.count).map(p=>({text:p.text,t:p.t,i:p.i}));
 }
 function aiPrompt(spec){
   const langs={en:'English',zu:'isiZulu',af:'Afrikaans',mix:'a natural mix of English and isiZulu'};
+  const adult=isAdult(spec);
+  const spiceGuide={
+    flirty:"Make them flirtatious and suggestive with playful innuendo — tease, don't spell it out.",
+    steamy:"Make them sensual and steamy for two consenting adults: desire, anticipation, physical attraction, without graphic anatomical detail.",
+    explicit:"Make them bold and explicit for two consenting adults who want that."
+  }[spec.spice]||'';
+  const closing=adult
+    ?"Everyone involved is a consenting adult (18+). Keep it consensual, enthusiastic and respectful — never degrading, coercive, or involving minors."
+    :"Keep it warm and consent-friendly; nothing explicit, nothing coercive.";
   return `You write prompts for a WhatsApp number-guessing game. Each number hides one short prompt the other person answers in the chat.
 Audience: ${spec.aud}. Intensity: ${spec.level}. Language: ${langs[spec.lang]}.
-${spec.note?'Context about the person: '+spec.note:''}
+${adult?spiceGuide+'\n':''}${spec.note?'Context about the person: '+spec.note:''}
 ${spec.mode==='mix'&&spec.types.length?'Use only these types: '+spec.types.join(', ')+'.':'Mix the types freely.'}
-Return ONLY a JSON array of exactly ${spec.count} objects, no prose, no markdown fences. Each object: {"text": string (max ~110 chars, ready to send), "t": one of question|photo|voice|challenge|confession|choice|rating|prediction, "i": one of chill|playful|bold|chaos}. Keep it warm and consent-friendly; nothing explicit, nothing coercive.`;
+Return ONLY a JSON array of exactly ${spec.count} objects, no prose, no markdown fences. Each object: {"text": string (max ~110 chars, ready to send), "t": one of question|photo|voice|challenge|confession|choice|rating|prediction, "i": one of chill|playful|bold|chaos}. ${closing}`;
 }
 async function callAI(spec){
   const body={model:store.model,max_tokens:1500,messages:[{role:'user',content:aiPrompt(spec)}]};
@@ -265,6 +299,20 @@ function syncMode(){
   $('#typesWrap').hidden=m!=='mix';
 }
 
+function toggleSpice(){
+  const show=['couple','crush'].includes($('#aud').value);
+  $('#spiceWrap').hidden=!show;
+  if(!show)$('#spice').value='off';
+}
+function confirmAdult(){
+  if(localStorage.getItem('wa.adult')==='1')return;
+  const d=$('#sheet');
+  d.innerHTML=`<h3>18+ only</h3><p class="hint" style="margin:0 0 10px">Spicy prompts are for consenting adults. Confirm everyone involved is 18 or older.</p>
+    <div class="srow"><button class="btn primary" id="adYes">I'm 18+</button><button class="btn ghost" id="adNo">Cancel</button></div>`;
+  d.showModal();
+  $('#adYes').onclick=()=>{localStorage.setItem('wa.adult','1');d.close()};
+  $('#adNo').onclick=()=>{$('#spice').value='off';d.close()};
+}
 function init(){
   $('#types').innerHTML=TYPES.map(([v,l])=>`<label><input type="checkbox" value="${v}" checked>${l}</label>`).join('');
   document.querySelectorAll('[name=mode]').forEach(r=>r.onchange=syncMode);syncMode();
@@ -279,6 +327,8 @@ function init(){
     toast('Settings saved');view('setup');
   };
   document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>view(b.dataset.v));
+  $('#aud').onchange=toggleSpice;toggleSpice();
+  $('#spice').onchange=()=>{if($('#spice').value!=='off')confirmAdult()};
   $('#backTop').onclick=()=>view('setup');
   view('setup');
 }
