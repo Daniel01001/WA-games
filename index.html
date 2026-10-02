@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#1f1747">
+<meta name="theme-color" content="#0d0e17">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -12,84 +12,104 @@
 <link rel="icon" href="icon.svg" type="image/svg+xml">
 <link rel="apple-touch-icon" href="icon.svg">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@400;600;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&display=swap" rel="stylesheet">
 <title>WA Games</title>
 <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header><b class="brand">WA Games</b><span class="hint">Build it here, play it in the chat</span></header>
+<div id="app">
 
-<main>
-<section id="setup">
-  <div class="seg" id="modes">
-    <label><input type="radio" name="mode" value="pick" checked><span>Pick a Number</span></label>
-    <label><input type="radio" name="mode" value="random"><span>Random Round</span></label>
-    <label><input type="radio" name="mode" value="mix"><span>Custom Mix</span></label>
-  </div>
-  <p class="hint" id="modeHelp"></p>
+  <header id="topbar">
+    <button id="backTop" aria-label="Back" hidden>
+      <svg viewBox="0 0 24 24"><path d="M15 5l-7 7 7 7"/></svg>
+    </button>
+    <h1 id="topTitle">WA Games</h1>
+  </header>
 
-  <div class="card">
-    <label for="title">Game title</label>
-    <input id="title" maxlength="50" placeholder="Pick a Number">
+  <main id="scroll">
 
-    <label for="brief">Tell the AI about them <span class="hint">(optional)</span></label>
-    <textarea id="brief" rows="3" placeholder="e.g. We met at varsity, she loves Amapiano, keep it flirty but not creepy"></textarea>
+    <section id="setup">
+      <div class="seg" id="modes" role="tablist">
+        <label><input type="radio" name="mode" value="pick" checked><span>Number</span></label>
+        <label><input type="radio" name="mode" value="random"><span>Random</span></label>
+        <label><input type="radio" name="mode" value="mix"><span>Mix</span></label>
+      </div>
+      <p class="tip" id="modeHelp"></p>
 
-    <div class="two">
-      <div><label for="aud">Who is it for</label>
-        <select id="aud"><option value="anyone">Anyone</option><option value="couple">Couple</option><option value="friends">Friends</option><option value="crush">Crush</option></select></div>
-      <div><label for="level">Intensity</label>
-        <select id="level"><option value="chill">Chill</option><option value="playful" selected>Playful</option><option value="bold">Bold</option><option value="chaos">Chaos</option></select></div>
-    </div>
-    <div class="two">
-      <div><label for="lang">Language</label>
-        <select id="lang"><option value="en">English</option><option value="zu">isiZulu</option><option value="af">Afrikaans</option><option value="mix" selected>Mixed</option></select></div>
-      <div><label for="count">Prompts</label>
-        <select id="count"><option>10</option><option>15</option><option selected>20</option></select></div>
-    </div>
+      <div class="group">
+        <div class="row"><label for="title">Game title</label>
+          <input id="title" maxlength="50" placeholder="Pick a Number"></div>
+        <div class="row"><label for="brief">Tell the AI about them <span class="opt">optional</span></label>
+          <textarea id="brief" rows="2" placeholder="We met at varsity, she loves Amapiano, keep it flirty"></textarea></div>
+      </div>
 
-    <div id="typesWrap" hidden>
-      <label>Include these types</label>
-      <div class="chips" id="types"></div>
-    </div>
+      <div class="group two-up">
+        <div class="row"><label for="aud">For</label>
+          <select id="aud"><option value="anyone">Anyone</option><option value="couple">Couple</option><option value="friends">Friends</option><option value="crush">Crush</option></select></div>
+        <div class="row"><label for="level">Intensity</label>
+          <select id="level"><option value="chill">Chill</option><option value="playful" selected>Playful</option><option value="bold">Bold</option><option value="chaos">Chaos</option></select></div>
+        <div class="row"><label for="lang">Language</label>
+          <select id="lang"><option value="en">English</option><option value="zu">isiZulu</option><option value="af">Afrikaans</option><option value="mix" selected>Mixed</option></select></div>
+        <div class="row"><label for="count">Prompts</label>
+          <select id="count"><option>10</option><option>15</option><option selected>20</option></select></div>
+      </div>
 
-    <button class="primary go" id="goAI">Generate with AI</button>
-    <button class="go" id="goBank">Build from built-in prompts</button>
-  </div>
-</section>
+      <div id="typesWrap" hidden>
+        <p class="sect">Prompt types</p>
+        <div class="chips" id="types"></div>
+      </div>
 
-<section id="board" hidden></section>
+      <button class="btn primary big" id="goAI">✨ Generate with AI</button>
+      <button class="btn big" id="goBank">Build free (no key)</button>
+    </section>
 
-<section id="saved" hidden>
-  <h2>Saved games</h2>
-  <div id="savedList"></div>
-</section>
+    <section id="board" hidden></section>
 
-<section id="settings" hidden>
-  <h2>Settings</h2>
-  <div class="card">
-    <label for="number">Their WhatsApp number <span class="hint">(optional, sends straight to their chat)</span></label>
-    <input id="number" inputmode="tel" placeholder="e.g. 082 123 4567">
-    <label for="key">Anthropic API key</label>
-    <input id="key" type="password" autocomplete="off" placeholder="sk-ant-...">
-    <label for="model">Model</label>
-    <input id="model" placeholder="claude-opus-4-8">
-    <label for="endpoint">Proxy URL <span class="hint">(optional, replaces the direct call and the key)</span></label>
-    <input id="endpoint" inputmode="url" placeholder="https://your-api.example.com/generate">
-    <button class="primary" id="saveSet">Save settings</button>
-    <p class="hint">Everything here is stored on this device only. A key in the browser is fine for personal use; use a proxy before sharing the app.</p>
-  </div>
-</section>
-</main>
+    <section id="saved" hidden>
+      <div id="savedList"></div>
+    </section>
+
+    <section id="settings" hidden>
+      <p class="sect">AI generation</p>
+      <div class="group">
+        <div class="row"><label for="key">Anthropic API key</label>
+          <input id="key" type="password" autocomplete="off" placeholder="sk-ant-…"></div>
+        <div class="row"><label for="model">Model</label>
+          <input id="model" placeholder="claude-opus-4-8"></div>
+        <div class="row"><label for="endpoint">Proxy URL <span class="opt">optional</span></label>
+          <input id="endpoint" inputmode="url" placeholder="https://your-api.example.com/generate"></div>
+      </div>
+      <p class="note">Stored on this device only. A key in the browser is fine for personal use; use a proxy before sharing the app.</p>
+
+      <p class="sect">Sharing</p>
+      <div class="group">
+        <div class="row"><label for="number">Their WhatsApp number <span class="opt">optional</span></label>
+          <input id="number" inputmode="tel" placeholder="082 123 4567"></div>
+      </div>
+      <p class="note">Set this to send messages straight to one person's chat.</p>
+
+      <button class="btn primary big" id="saveSet">Save settings</button>
+      <p class="ver">WA Games · v2</p>
+    </section>
+
+  </main>
+
+  <nav id="tabs">
+    <button data-v="setup" class="on">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v8M8 12h8"/></svg><span>Create</span>
+    </button>
+    <button data-v="saved">
+      <svg viewBox="0 0 24 24"><path d="M6 4h12v16l-6-4-6 4z"/></svg><span>Saved</span>
+    </button>
+    <button data-v="settings">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M18.4 5.6l-2.1 2.1M7.7 16.3l-2.1 2.1"/></svg><span>Settings</span>
+    </button>
+  </nav>
+
+</div>
 
 <dialog id="sheet"></dialog>
 <div id="toast" class="toast" role="status"></div>
-
-<nav>
-  <button data-v="setup" class="on">New game</button>
-  <button data-v="saved">Saved</button>
-  <button data-v="settings">Settings</button>
-</nav>
 <script src="app.js"></script>
 </body>
 </html>

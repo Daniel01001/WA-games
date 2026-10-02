@@ -163,20 +163,17 @@ function renderBoard(){
   const s=$('#board');
   const pick=game.mode==='pick';
   s.innerHTML=`
-  <div class="bhead"><h2>${game.title}</h2><span class="lock">🔒 ${game.lock}</span></div>
-  <p class="hint">${pick?'Send the intro, then tap a number as they call it. Reveal the list when they ask.':'Random order — send the list and play.'}</p>
+  <div class="lockbar"><span class="lock">🔒 ${game.lock}</span><span class="hint">${game.list.length} prompts · ${game.lang==='mix'?'EN+ZU':game.lang.toUpperCase()}</span></div>
+  <p class="tip">${pick?'Send the intro, then tap a number as they call it. Reveal the list when they ask.':'Random order — send the list and play.'}</p>
   <div class="msgs">
-    <button class="primary" data-msg="intro">Copy intro</button>
-    <button data-msg="reveal">Copy full list</button>
-    <button data-msg="remaining">Copy remaining</button>
-    <button class="wa" data-wa="intro">Send intro ▸</button>
+    <button class="btn primary" data-msg="intro">Copy intro</button>
+    <button class="btn" data-msg="reveal">Copy full list</button>
+    <button class="btn" data-msg="remaining">Copy remaining</button>
+    <button class="btn wa" data-wa="intro">Send intro ▸</button>
   </div>
   ${pick?`<div class="grid">${game.list.map(p=>`<button class="tile${game.used.includes(p.n)?' used':''}" data-n="${p.n}">${p.n}</button>`).join('')}</div>`:
-         `<div class="card"><ol>${game.list.map(p=>`<li style="margin:6px 0">${p.text}</li>`).join('')}</ol></div>`}
-  <div class="sv">
-    <span class="hint">${game.list.length} prompts • ${game.lang==='mix'?'EN+ZU':game.lang.toUpperCase()}</span>
-    <div class="srow"><button class="ghost" id="saveGame">Save</button><button class="ghost" id="again">New</button></div>
-  </div>`;
+         `<ol class="board-list">${game.list.map(p=>`<li>${p.text}</li>`).join('')}</ol>`}
+  <div class="sv"><div class="srow"><button class="btn ghost" id="saveGame">Save game</button><button class="btn ghost" id="again">New game</button></div></div>`;
   s.querySelectorAll('[data-msg]').forEach(b=>b.onclick=()=>copy({intro:introMsg,reveal:revealMsg,remaining:remainingMsg}[b.dataset.msg]()));
   s.querySelectorAll('[data-wa]').forEach(b=>b.onclick=()=>window.open(waUrl(introMsg()),'_blank'));
   s.querySelectorAll('.tile').forEach(t=>t.onclick=()=>openNumber(+t.dataset.n));
@@ -189,15 +186,15 @@ function openNumber(n){
   d.innerHTML=`<h3>Number ${n} <span class="hint">· ${p.t} · ${p.i}</span></h3>
     <pre>${p.text.replace(/</g,'&lt;')}</pre>
     <div class="srow">
-      <button class="primary" id="cpN">Copy this prompt</button>
-      <button class="wa" id="waN">Send ▸</button>
+      <button class="btn primary" id="cpN">Copy prompt</button>
+      <button class="btn wa" id="waN">Send ▸</button>
     </div>
     <div class="srow">
-      <button id="tone">Shift tone</button>
-      <button id="regen">Regenerate</button>
-      <button class="ghost" id="mark">${game.used.includes(n)?'Mark unused':'Mark used'}</button>
+      <button class="btn" id="tone">Shift tone</button>
+      <button class="btn" id="regen">Regenerate</button>
     </div>
-    <button class="ghost" id="closeN" style="width:100%;margin-top:8px">Close</button>`;
+    <button class="btn ghost" id="mark" style="width:100%;margin-top:10px">${game.used.includes(n)?'Mark unused':'Mark used'}</button>
+    <button class="btn ghost" id="closeN" style="width:100%;margin-top:6px">Close</button>`;
   $('#cpN').onclick=()=>copy(lookupMsg(n));
   $('#waN').onclick=()=>window.open(waUrl(lookupMsg(n)),'_blank');
   $('#mark').onclick=()=>{game.used.includes(n)?game.used=game.used.filter(x=>x!==n):game.used.push(n);d.close();renderBoard()};
@@ -230,7 +227,7 @@ async function copy(text){
   try{await navigator.clipboard.writeText(text);toast('Copied')}
   catch{
     const d=$('#sheet');
-    d.innerHTML=`<h3>Copy manually</h3><pre id="man">${text.replace(/</g,'&lt;')}</pre><button class="ghost" id="closeMan" style="width:100%">Close</button>`;
+    d.innerHTML=`<h3>Copy manually</h3><pre id="man">${text.replace(/</g,'&lt;')}</pre><button class="btn ghost" id="closeMan" style="width:100%;margin-top:8px">Close</button>`;
     d.showModal();$('#closeMan').onclick=()=>d.close();
     const r=document.createRange();r.selectNodeContents($('#man'));const s=getSelection();s.removeAllRanges();s.addRange(r);
   }
@@ -242,22 +239,25 @@ function saveCurrent(){
 }
 function renderSaved(){
   const all=store.games(),l=$('#savedList');
-  if(!all.length){l.innerHTML='<p class="hint">No saved games yet. Build one and tap Save.</p>';return}
-  l.innerHTML=all.map((g,idx)=>`<div class="card" style="padding:14px 16px">
-    <div class="bhead"><b>${g.title}</b><span class="lock">${g.lock}</span></div>
-    <p class="hint">${g.list.length} prompts • ${new Date(g.ts).toLocaleDateString()}</p>
-    <div class="srow"><button data-open="${idx}">Open</button><button class="ghost" data-del="${idx}">Delete</button></div>
+  if(!all.length){l.innerHTML='<div class="empty"><svg viewBox="0 0 24 24"><path d="M6 4h12v16l-6-4-6 4z"/></svg><p>No saved games yet.<br>Build one and tap Save.</p></div>';return}
+  l.innerHTML=all.map((g,idx)=>`<div class="saved-card">
+    <div class="top"><b>${g.title}</b><span class="lock">🔒 ${g.lock}</span></div>
+    <p class="hint" style="margin:8px 0 12px">${g.list.length} prompts · ${new Date(g.ts).toLocaleDateString()}</p>
+    <div class="srow"><button class="btn" data-open="${idx}">Open</button><button class="btn ghost" data-del="${idx}">Delete</button></div>
   </div>`).join('');
   l.querySelectorAll('[data-open]').forEach(btn=>btn.onclick=()=>{game=all[+btn.dataset.open];game.used=game.used||[];renderBoard();view('board')});
   l.querySelectorAll('[data-del]').forEach(btn=>btn.onclick=()=>{const a=store.games();a.splice(+btn.dataset.del,1);store.saveGames(a);renderSaved()});
 }
 
 /* ---------- nav / setup wiring ---------- */
+const TITLES={setup:'WA Games',saved:'Saved games',settings:'Settings'};
 function view(v){
   ['setup','board','saved','settings'].forEach(id=>$('#'+id).hidden=(id!==v));
+  $('#topTitle').textContent=(v==='board'&&game)?game.title:TITLES[v];
+  $('#backTop').hidden=(v!=='board');
   document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v||(v==='board'&&b.dataset.v==='setup')));
+  const sc=$('#scroll');if(sc)sc.scrollTo(0,0);
   if(v==='saved')renderSaved();
-  scrollTo(0,0);
 }
 function syncMode(){
   const m=document.querySelector('[name=mode]:checked').value;
@@ -279,6 +279,7 @@ function init(){
     toast('Settings saved');view('setup');
   };
   document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>view(b.dataset.v));
+  $('#backTop').onclick=()=>view('setup');
   view('setup');
 }
 
