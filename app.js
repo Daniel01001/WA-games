@@ -1,190 +1,264 @@
-const categories=[
- {id:"couples",emoji:"❤️",name:"Couples",desc:"Love, memories & preferences"},
- {id:"friends",emoji:"😂",name:"Friends",desc:"Funny & get-to-know-you"},
- {id:"trivia",emoji:"🧠",name:"Trivia",desc:"General knowledge"},
- {id:"truth",emoji:"🔥",name:"Truth or Dare",desc:"Truths, dares & challenges"},
- {id:"would",emoji:"💬",name:"Would You Rather",desc:"Impossible choices"},
- {id:"personality",emoji:"🎭",name:"Personality",desc:"Find out how they think"},
- {id:"sa",emoji:"🇿🇦",name:"South Africa",desc:"Local trivia & culture"},
- {id:"custom",emoji:"✨",name:"Custom",desc:"Build your own theme"}
-];
-
-const banks={
-couples:[
- ["mc","What's my favourite type of date?","A. Dinner out\nB. Movie night\nC. Adventure day\nD. Staying home"],
- ["open","What's one thing I do that always makes you laugh?"],
- ["mc","Which would I choose for a holiday?","A. Beach\nB. Mountains\nC. City\nD. Game reserve"],
- ["open","What's a memory of us that I would probably never forget?"],
- ["mc","Who is more likely to say 'I love you' first after an argument?","A. Me\nB. You"],
- ["open","What is one small thing that makes me feel appreciated?"],
- ["mc","If I had a free weekend, what would I most likely want to do?","A. Sleep\nB. Go out\nC. Travel\nD. Stay with you"],
- ["open","What is something I am secretly competitive about?"],
- ["mc","Which gift would I appreciate most?","A. Something practical\nB. Something romantic\nC. An experience\nD. Food"],
- ["open","What is one place you think I would love to visit with you?"]
-],
-friends:[
- ["mc","Which food would I pick first?","A. Pizza\nB. Burger\nC. Chicken\nD. Sushi"],
- ["open","What is my most predictable habit?"],
- ["mc","If I disappeared for a day, where would I most likely be?","A. Home\nB. With friends\nC. Travelling\nD. Sleeping"],
- ["open","What is something I always complain about?"],
- ["mc","What am I most likely to spend money on?","A. Food\nB. Cars\nC. Tech\nD. Clothes"],
- ["open","What is my funniest trait?"],
- ["mc","Who would survive longest in a zombie apocalypse?","A. Me\nB. You\nC. Neither of us"],
- ["open","What is one thing you think I should try at least once?"],
- ["mc","What kind of person annoys me most?","A. Loud\nB. Fake\nC. Slow\nD. Arrogant"],
- ["open","What is the first word that comes to mind when you think of me?"]
-],
-trivia:[
- ["mc","What is the capital of South Africa?","A. Johannesburg\nB. Pretoria\nC. Cape Town\nD. Durban","B"],
- ["mc","Which planet is known as the Red Planet?","A. Venus\nB. Mars\nC. Jupiter\nD. Mercury","B"],
- ["mc","How many continents are there?","A. 5\nB. 6\nC. 7\nD. 8","C"],
- ["mc","Which ocean is the largest?","A. Atlantic\nB. Indian\nC. Pacific\nD. Arctic","C"],
- ["mc","What is the chemical symbol for gold?","A. Ag\nB. Au\nC. Gd\nD. Go","B"],
- ["mc","Which language has the most native speakers?","A. English\nB. Spanish\nC. Mandarin Chinese\nD. French","C"],
- ["mc","How many sides does a hexagon have?","A. 5\nB. 6\nC. 7\nD. 8","B"],
- ["mc","Which animal is the largest living land animal?","A. Rhino\nB. Hippo\nC. Elephant\nD. Giraffe","C"],
- ["mc","What is 12 × 8?","A. 86\nB. 96\nC. 108\nD. 112","B"],
- ["mc","Which gas do humans need to breathe?","A. Oxygen\nB. Nitrogen\nC. Carbon dioxide\nD. Helium","A"]
-],
-truth:[
- ["mc","Truth: What's one thing you have never told me?","A. Something funny\nB. Something embarrassing\nC. Something sweet\nD. Something random"],
- ["open","Truth: What was your first impression of me?"],
- ["mc","Dare: Send a voice note using your most dramatic voice.","A. Done\nB. I'm scared"],
- ["open","Truth: What is one thing you would change about yourself?"],
- ["mc","Dare: Send the last emoji you used five times.","A. Done\nB. No chance"],
- ["open","Truth: What is your most embarrassing moment?"],
- ["mc","Dare: Give me a ridiculous nickname.","A. Done\nB. Thinking..."],
- ["open","Truth: What is something you pretend not to care about?"],
- ["mc","Dare: Send a selfie with your funniest face.","A. Done\nB. Maybe"],
- ["open","Truth: What is one thing you want to do this year?"]
-],
-would:[
- ["would","Would you rather have unlimited money or unlimited free time?","A. Money\nB. Free time"],
- ["would","Would you rather travel to the past or the future?","A. Past\nB. Future"],
- ["would","Would you rather always be 10 minutes late or 20 minutes early?","A. Late\nB. Early"],
- ["would","Would you rather live near the ocean or mountains?","A. Ocean\nB. Mountains"],
- ["would","Would you rather be famous or completely anonymous?","A. Famous\nB. Anonymous"],
- ["would","Would you rather give up social media or streaming forever?","A. Social media\nB. Streaming"],
- ["would","Would you rather have your dream car or dream house?","A. Car\nB. House"],
- ["would","Would you rather know when you will die or how you will die?","A. When\nB. How"],
- ["would","Would you rather never use cash again or never use cards again?","A. Cash\nB. Cards"],
- ["would","Would you rather be able to read minds or see the future?","A. Read minds\nB. See future"]
-],
-personality:[
- ["mc","When plans change suddenly, what would I most likely do?","A. Adapt\nB. Stress\nC. Laugh\nD. Take control"],
- ["open","What do you think motivates me the most?"],
- ["mc","In a group, what role would I naturally take?","A. Leader\nB. Entertainer\nC. Observer\nD. Problem solver"],
- ["open","What do you think I value most in a friendship?"],
- ["mc","When I have a free evening, what sounds best?","A. Going out\nB. Gaming\nC. Watching something\nD. Quiet time"],
- ["open","What do you think I worry about more than I admit?"],
- ["mc","If I received unexpected money, what would I do first?","A. Save\nB. Spend\nC. Invest\nD. Help someone"],
- ["open","What kind of compliment would mean the most to me?"],
- ["mc","When solving a problem, I am more likely to...","A. Research\nB. Experiment\nC. Ask someone\nD. Ignore it until later"],
- ["open","What is one quality you think describes me best?"]
-],
-sa:[
- ["mc","What is South Africa's currency?","A. Dollar\nB. Rand\nC. Shilling\nD. Pula","B"],
- ["mc","How many official languages does South Africa currently have?","A. 9\nB. 10\nC. 11\nD. 12","C"],
- ["mc","Which city is known as the Mother City?","A. Durban\nB. Pretoria\nC. Cape Town\nD. Bloemfontein","C"],
- ["mc","Which animal is NOT one of the Big Five?","A. Lion\nB. Elephant\nC. Rhino\nD. Giraffe","D"],
- ["mc","Which ocean borders South Africa to the east?","A. Pacific\nB. Indian\nC. Arctic\nD. Atlantic","B"],
- ["mc","What is the administrative capital of South Africa?","A. Pretoria\nB. Durban\nC. Cape Town\nD. Polokwane","A"],
- ["mc","Which sport is traditionally associated with the Springboks?","A. Cricket\nB. Rugby\nC. Football\nD. Tennis","B"],
- ["mc","Which province contains Johannesburg?","A. Gauteng\nB. Limpopo\nC. Free State\nD. Mpumalanga","A"],
- ["mc","What is the name commonly used for South Africa's national rugby team?","A. Proteas\nB. Bafana Bafana\nC. Springboks\nD. Amajita","C"],
- ["mc","Which waterfall is associated with the Drakensberg region?","A. Tugela Falls\nB. Victoria Falls\nC. Augrabies only\nD. Howick Falls","A"]
-]
+/* WA Games V2 — creator console. The chat is the game board; this app only
+   generates games and produces copy-ready WhatsApp messages. */
+const $=s=>document.querySelector(s);
+const store={
+  get k(){return localStorage.getItem('wa.key')||''},
+  get model(){return localStorage.getItem('wa.model')||'claude-opus-4-8'},
+  get endpoint(){return localStorage.getItem('wa.endpoint')||''},
+  get number(){return localStorage.getItem('wa.number')||''},
+  games(){try{return JSON.parse(localStorage.getItem('wa.games')||'[]')}catch{return[]}},
+  saveGames(g){localStorage.setItem('wa.games',JSON.stringify(g.slice(0,30)))}
 };
 
-let selectedCategory="couples", currentGame=null;
+const MODES={
+  pick:'They pick blind numbers, then you reveal the full locked list.',
+  random:'One message deals prompts in a random order — no number game.',
+  mix:'Pick the exact prompt types you want, then build the list.'
+};
+const TYPES=[
+  ['question','❓ Question'],['photo','📸 Photo'],['voice','🎤 Voice'],
+  ['challenge','⚡ Challenge'],['confession','🙊 Confession'],['choice','🔀 Choice'],
+  ['rating','⭐ Rating'],['prediction','🔮 Prediction']
+];
 
-const $=id=>document.getElementById(id);
-function toast(msg){const t=$("toast");t.textContent=msg;t.classList.add("show");setTimeout(()=>t.classList.remove("show"),2200)}
-function show(id){document.querySelectorAll(".screen").forEach(s=>s.classList.remove("active"));$(id).classList.add("active");window.scrollTo(0,0)}
+/* ---- built-in prompt bank (fallback when AI is off), tagged with metadata ---- */
+const BANK=[
+  {t:'question',i:'chill',text:"What's the first thing you noticed about me?"},
+  {t:'question',i:'playful',text:"Yini oyithanda kakhulu ngami? (What do you like most about me?)"},
+  {t:'confession',i:'bold',text:"Confess one time you stalked my status 👀"},
+  {t:'photo',i:'playful',text:"Send the last photo in your camera roll, no editing"},
+  {t:'voice',i:'bold',text:"Voice note: say my name the way you save it on your phone"},
+  {t:'challenge',i:'playful',text:"Text me using only emojis for your next reply"},
+  {t:'rating',i:'chill',text:"Rate this chat so far out of 10 and say why"},
+  {t:'choice',i:'playful',text:"Amapiano or Hip-hop, and who's your top artist?"},
+  {t:'prediction',i:'playful',text:"Guess what I'm doing right now — closest wins"},
+  {t:'confession',i:'chaos',text:"Ungitshele into oyenzayo ongafuni mina ngiyazi (tell me one thing you do that you don't want me to know)"},
+  {t:'question',i:'chill',text:"Early bird or 2am overthinker?"},
+  {t:'photo',i:'bold',text:"Selfie right now, current face, no warning"},
+  {t:'challenge',i:'chaos',text:"Send a voice note singing your current favourite song"},
+  {t:'rating',i:'playful',text:"Rate my dress sense from 1 to 10, be honest"},
+  {t:'choice',i:'bold',text:"My place or yours for the first proper hangout?"},
+  {t:'prediction',i:'playful',text:"Predict one thing I'll do this weekend"},
+  {t:'question',i:'bold',text:"What's a text you typed to me but never sent?"},
+  {t:'confession',i:'playful',text:"Confess your most embarrassing autocorrect moment"},
+  {t:'voice',i:'chill',text:"Voice note: your laugh, on demand 😂"},
+  {t:'question',i:'chaos',text:"If we swapped phones for an hour, what are you deleting first?"}
+];
 
-function renderCategories(){
- $("categoryGrid").innerHTML=categories.map(c=>`<button class="category ${c.id===selectedCategory?"selected":""}" data-id="${c.id}">
- <span class="emoji">${c.emoji}</span><b>${c.name}</b><small>${c.desc}</small></button>`).join("");
- document.querySelectorAll(".category").forEach(b=>b.onclick=()=>{selectedCategory=b.dataset.id;renderCategories()});
+/* ---------- helpers ---------- */
+function toast(m){const t=$('#toast');t.textContent=m;t.classList.add('show');clearTimeout(toast._);toast._=setTimeout(()=>t.classList.remove('show'),2200)}
+function shuffle(a){a=[...a];for(let i=a.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[a[i],a[j]]=[a[j],a[i]]}return a}
+// Deterministic fingerprint of the ordered list → the Lock ID trust signal.
+function lockId(list){
+  let h=0x811c9dc5;const s=list.map(p=>p.text).join('|');
+  for(let i=0;i<s.length;i++){h^=s.charCodeAt(i);h=(h*0x01000193)>>>0}
+  return 'LOCK-'+h.toString(36).toUpperCase().padStart(7,'0').slice(0,7);
+}
+const b=t=>'*'+t+'*', it=t=>'_'+t+'_';
+function waUrl(text){const n=store.number.replace(/\D/g,'');return(n?'https://wa.me/'+n+'?text=':'https://wa.me/?text=')+encodeURIComponent(text)}
+
+/* ---------- state ---------- */
+let game=null; // {title,mode,lang,lock,list:[{n,text,t,i}],used:[]}
+
+/* ---------- generation ---------- */
+function brief(){
+  return{
+    title:$('#title').value.trim(),
+    mode:document.querySelector('[name=mode]:checked').value,
+    aud:$('#aud').value, level:$('#level').value,
+    lang:$('#lang').value, count:+$('#count').value,
+    note:$('#brief').value.trim(),
+    types:[...document.querySelectorAll('#types input:checked')].map(c=>c.value)
+  };
+}
+function buildFromBank(spec){
+  let pool=BANK.filter(p=>spec.mode!=='mix'||!spec.types.length||spec.types.includes(p.t));
+  if(!pool.length)pool=BANK;
+  let out=shuffle(pool);
+  while(out.length<spec.count)out=out.concat(shuffle(pool));
+  return out.slice(0,spec.count).map(p=>({text:p.text,t:p.t,i:p.i}));
+}
+function aiPrompt(spec){
+  const langs={en:'English',zu:'isiZulu',af:'Afrikaans',mix:'a natural mix of English and isiZulu'};
+  return `You write prompts for a WhatsApp number-guessing game. Each number hides one short prompt the other person answers in the chat.
+Audience: ${spec.aud}. Intensity: ${spec.level}. Language: ${langs[spec.lang]}.
+${spec.note?'Context about the person: '+spec.note:''}
+${spec.mode==='mix'&&spec.types.length?'Use only these types: '+spec.types.join(', ')+'.':'Mix the types freely.'}
+Return ONLY a JSON array of exactly ${spec.count} objects, no prose, no markdown fences. Each object: {"text": string (max ~110 chars, ready to send), "t": one of question|photo|voice|challenge|confession|choice|rating|prediction, "i": one of chill|playful|bold|chaos}. Keep it warm and consent-friendly; nothing explicit, nothing coercive.`;
+}
+async function callAI(spec){
+  const body={model:store.model,max_tokens:1500,messages:[{role:'user',content:aiPrompt(spec)}]};
+  let data;
+  if(store.endpoint){
+    const r=await fetch(store.endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)});
+    if(!r.ok)throw new Error('Proxy returned '+r.status);
+    data=await r.json();
+  }else{
+    if(!store.k)throw new Error('no-key');
+    const r=await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':store.k,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify(body)});
+    if(!r.ok)throw new Error('API returned '+r.status);
+    data=await r.json();
+  }
+  const txt=(data.content||[]).filter(c=>c.type==='text').map(c=>c.text).join('').trim().replace(/^```json?|```$/g,'').trim();
+  const arr=JSON.parse(txt);
+  return arr.map(p=>({text:String(p.text||'').trim(),t:p.t||'question',i:p.i||'playful'})).filter(p=>p.text).slice(0,spec.count);
+}
+function assemble(spec,list){
+  const ordered=spec.mode==='pick'?shuffle(list):list; // genuine shuffle of number→prompt
+  game={
+    title:spec.title||(spec.mode==='pick'?'Pick a Number':spec.mode==='random'?'Random Round':'Custom Mix'),
+    mode:spec.mode, lang:spec.lang,
+    list:ordered.map((p,idx)=>({n:idx+1,...p})),
+    used:[]
+  };
+  game.lock=lockId(game.list);
+  renderBoard(); view('board');
+}
+async function doAI(){
+  const spec=brief(), btn=$('#goAI');
+  if(!store.k&&!store.endpoint){view('settings');toast('Add your API key (or proxy URL) first');return}
+  btn.disabled=true;btn.textContent='Generating…';
+  try{assemble(spec,await callAI(spec));toast('Game ready')}
+  catch(e){toast(e.message==='no-key'?'Add your API key in Settings':'AI failed — used built-in prompts');assemble(spec,buildFromBank(spec))}
+  finally{btn.disabled=false;btn.textContent='Generate with AI'}
 }
 
-function shuffle(a){return [...a].sort(()=>Math.random()-.5)}
-function makeQuestions(){
- const count=+$("questionCount").value;
- const allowMC=$("mc").checked, allowOpen=$("open").checked, allowWould=$("would").checked;
- let source=banks[selectedCategory]||banks.couples;
- let allowed=source.filter(q=>(q[0]==="mc"&&allowMC)||(q[0]==="open"&&allowOpen)||(q[0]==="would"&&allowWould));
- if(!allowed.length) allowed=source;
- let qs=shuffle(allowed);
- while(qs.length<count) qs=qs.concat(shuffle(allowed));
- return qs.slice(0,count).map((q,i)=>({id:i+1,type:q[0],text:q[1],options:q[2]||"",answer:q[3]||null}));
+/* ---------- copy-ready messages ---------- */
+function introMsg(){
+  const range=`1–${game.list.length}`;
+  return `${b('🎮 '+game.title)}\n\n${game.lang==='zu'?'Khetha inombolo':'Pick a number'} ${range} 🎯\n${it('Locked before you picked: '+game.lock)}`;
+}
+function revealMsg(){
+  const lines=game.list.map(p=>`${b(p.n+'.')} ${p.text}`).join('\n');
+  return `${b('The full list')} 🔓\n${it('Same lock: '+game.lock+' — nothing changed)')}\n\n${lines}`;
+}
+function lookupMsg(n){const p=game.list.find(x=>x.n===n);return p?`${b(n+'.')} ${p.text}`:''}
+function remainingMsg(){
+  const left=game.list.filter(p=>!game.used.includes(p.n)).map(p=>p.n);
+  return left.length?`${b('Still open:')} ${left.join(', ')}`:'All numbers used — '+it('run it back?');
 }
 
-function generate(){
- currentGame={title:$("gameTitle").value.trim()||"WhatsApp Game",category:selectedCategory,questions:makeQuestions(),custom:$("customPrompt").value.trim()};
- $("gameHeading").textContent=currentGame.title;
- $("gameMeta").textContent=`${categories.find(c=>c.id===selectedCategory)?.name||"Game"} • ${currentGame.questions.length} questions`;
- renderGame();show("gameScreen");
+/* ---------- board ---------- */
+function renderBoard(){
+  const s=$('#board');
+  const pick=game.mode==='pick';
+  s.innerHTML=`
+  <div class="bhead"><h2>${game.title}</h2><span class="lock">🔒 ${game.lock}</span></div>
+  <p class="hint">${pick?'Send the intro, then tap a number as they call it. Reveal the list when they ask.':'Random order — send the list and play.'}</p>
+  <div class="msgs">
+    <button class="primary" data-msg="intro">Copy intro</button>
+    <button data-msg="reveal">Copy full list</button>
+    <button data-msg="remaining">Copy remaining</button>
+    <button class="wa" data-wa="intro">Send intro ▸</button>
+  </div>
+  ${pick?`<div class="grid">${game.list.map(p=>`<button class="tile${game.used.includes(p.n)?' used':''}" data-n="${p.n}">${p.n}</button>`).join('')}</div>`:
+         `<div class="card"><ol>${game.list.map(p=>`<li style="margin:6px 0">${p.text}</li>`).join('')}</ol></div>`}
+  <div class="sv">
+    <span class="hint">${game.list.length} prompts • ${game.lang==='mix'?'EN+ZU':game.lang.toUpperCase()}</span>
+    <div class="srow"><button class="ghost" id="saveGame">Save</button><button class="ghost" id="again">New</button></div>
+  </div>`;
+  s.querySelectorAll('[data-msg]').forEach(b=>b.onclick=()=>copy({intro:introMsg,reveal:revealMsg,remaining:remainingMsg}[b.dataset.msg]()));
+  s.querySelectorAll('[data-wa]').forEach(b=>b.onclick=()=>window.open(waUrl(introMsg()),'_blank'));
+  s.querySelectorAll('.tile').forEach(t=>t.onclick=()=>openNumber(+t.dataset.n));
+  $('#saveGame').onclick=saveCurrent;
+  $('#again').onclick=()=>view('setup');
+}
+function openNumber(n){
+  const p=game.list.find(x=>x.n===n);
+  const d=$('#sheet');
+  d.innerHTML=`<h3>Number ${n} <span class="hint">· ${p.t} · ${p.i}</span></h3>
+    <pre>${p.text.replace(/</g,'&lt;')}</pre>
+    <div class="srow">
+      <button class="primary" id="cpN">Copy this prompt</button>
+      <button class="wa" id="waN">Send ▸</button>
+    </div>
+    <div class="srow">
+      <button id="tone">Shift tone</button>
+      <button id="regen">Regenerate</button>
+      <button class="ghost" id="mark">${game.used.includes(n)?'Mark unused':'Mark used'}</button>
+    </div>
+    <button class="ghost" id="closeN" style="width:100%;margin-top:8px">Close</button>`;
+  $('#cpN').onclick=()=>copy(lookupMsg(n));
+  $('#waN').onclick=()=>window.open(waUrl(lookupMsg(n)),'_blank');
+  $('#mark').onclick=()=>{game.used.includes(n)?game.used=game.used.filter(x=>x!==n):game.used.push(n);d.close();renderBoard()};
+  $('#closeN').onclick=()=>d.close();
+  $('#tone').onclick=()=>reworkPrompt(n,'tone');
+  $('#regen').onclick=()=>reworkPrompt(n,'regen');
+  d.showModal();
+}
+async function reworkPrompt(n,kind){
+  const p=game.list.find(x=>x.n===n);
+  if(!store.k&&!store.endpoint){toast('Needs AI — add a key in Settings');return}
+  const want=kind==='tone'?'Rewrite it one notch bolder, same type and language.':'Write a fresh different prompt, same type, intensity and language.';
+  const msg=`Current WhatsApp game prompt (type ${p.t}, intensity ${p.i}): "${p.text}". ${want} Return ONLY the new prompt text, no quotes, no prose.`;
+  const btn=$('#'+(kind==='tone'?'tone':'regen'));btn.disabled=true;btn.textContent='…';
+  try{
+    const body={model:store.model,max_tokens:200,messages:[{role:'user',content:msg}]};
+    const r=store.endpoint
+      ?await fetch(store.endpoint,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)})
+      :await fetch('https://api.anthropic.com/v1/messages',{method:'POST',headers:{'Content-Type':'application/json','x-api-key':store.k,'anthropic-version':'2023-06-01','anthropic-dangerous-direct-browser-access':'true'},body:JSON.stringify(body)});
+    if(!r.ok)throw 0;
+    const data=await r.json();
+    const t=(data.content||[]).filter(c=>c.type==='text').map(c=>c.text).join('').trim().replace(/^["']|["']$/g,'');
+    if(t){p.text=t;game.lock=lockId(game.list);toast('Updated — lock refreshed');$('#sheet').close();renderBoard();}
+  }catch{toast('Could not reach AI')}
+  finally{btn.disabled=false}
 }
 
-function renderGame(){
- $("questions").innerHTML=currentGame.questions.map(q=>`<article class="question">
- <div class="q-top"><span class="q-number">QUESTION ${q.id}</span><span class="badge">${q.type==="open"?"OPEN":q.type==="would"?"WOULD YOU RATHER":"MULTIPLE CHOICE"}</span></div>
- <div class="q-text">${q.text}</div>
- ${q.options?q.options.split("\\n").map(x=>`<div class="option">${x}</div>`).join(""):""}
- </article>`).join("");
+/* ---------- copy ---------- */
+async function copy(text){
+  try{await navigator.clipboard.writeText(text);toast('Copied')}
+  catch{
+    const d=$('#sheet');
+    d.innerHTML=`<h3>Copy manually</h3><pre id="man">${text.replace(/</g,'&lt;')}</pre><button class="ghost" id="closeMan" style="width:100%">Close</button>`;
+    d.showModal();$('#closeMan').onclick=()=>d.close();
+    const r=document.createRange();r.selectNodeContents($('#man'));const s=getSelection();s.removeAllRanges();s.addRange(r);
+  }
 }
 
-function waText(){
- let s=`🎮 ${currentGame.title}\\n\\n`;
- s+=`Answer the questions and reply with your answers in this format:\\n1. A\\n2. Your answer\\n3. B\\n\\n`;
- currentGame.questions.forEach(q=>{s+=`${q.id}. ${q.text}\\n`;if(q.options)s+=q.options+"\\n";s+="\\n"});
- s+=`Reply with all answers in one message. Have fun! 😄`;
- return s;
+/* ---------- saved games ---------- */
+function saveCurrent(){
+  const all=store.games();all.unshift({...game,ts:Date.now()});store.saveGames(all);toast('Saved to this device')
 }
-async function copyText(){
- try{await navigator.clipboard.writeText(waText());toast("Questions copied");}
- catch{toast("Copy unavailable — select and copy manually")}
-}
-function shareWA(){window.open("https://wa.me/?text="+encodeURIComponent(waText()),"_blank")}
-
-function parseAnswers(text){
- const map={};
- text.split(/\n/).forEach(line=>{
-   const m=line.match(/^\s*(\d+)\s*[\.\):\-]\s*(.*?)\s*$/);
-   if(m) map[+m[1]]=m[2].trim();
- });
- return map;
-}
-function evaluate(){
- const answers=parseAnswers($("answerInput").value);
- let score=0, auto=0;
- const rows=currentGame.questions.map(q=>{
-   const given=(answers[q.id]||"").trim();
-   let status="open";
-   if(q.answer){
-     auto++;
-     const norm=x=>x.toLowerCase().replace(/[\.\s]/g,"");
-     const ok=norm(given).startsWith(norm(q.answer));
-     if(ok){score++;status="correct"}else status="incorrect";
-   }
-   return {q,given,status};
- });
- const percent=auto?Math.round(score/auto*100):null;
- $("result").innerHTML=`<div class="result-card">
- ${percent===null?`<div class="score">✓</div><h3>Answers captured</h3><p>Open-ended questions need your own judgement.</p>`:`<div class="score">${score}/${auto}</div><h3>${percent}% automatic score</h3><p class="muted">Only questions with predefined answers are auto-scored.</p>`}
- <div class="review">${rows.map(r=>`<div class="review-row">
- <b>${r.q.id}. ${r.q.text}</b><br>
- <span class="${r.status==="correct"?"correct":r.status==="incorrect"?"incorrect":""}">${r.status==="correct"?"✓ Correct":r.status==="incorrect"?`✗ Their answer: ${r.given||"(blank)"} — correct: ${r.q.answer}`:`• Their answer: ${r.given||"(blank)"}`}</span>
- </div>`).join("")}</div></div>`;
+function renderSaved(){
+  const all=store.games(),l=$('#savedList');
+  if(!all.length){l.innerHTML='<p class="hint">No saved games yet. Build one and tap Save.</p>';return}
+  l.innerHTML=all.map((g,idx)=>`<div class="card" style="padding:14px 16px">
+    <div class="bhead"><b>${g.title}</b><span class="lock">${g.lock}</span></div>
+    <p class="hint">${g.list.length} prompts • ${new Date(g.ts).toLocaleDateString()}</p>
+    <div class="srow"><button data-open="${idx}">Open</button><button class="ghost" data-del="${idx}">Delete</button></div>
+  </div>`).join('');
+  l.querySelectorAll('[data-open]').forEach(btn=>btn.onclick=()=>{game=all[+btn.dataset.open];game.used=game.used||[];renderBoard();view('board')});
+  l.querySelectorAll('[data-del]').forEach(btn=>btn.onclick=()=>{const a=store.games();a.splice(+btn.dataset.del,1);store.saveGames(a);renderSaved()});
 }
 
-$("generateBtn").onclick=generate;
-$("copyBtn").onclick=copyText;
-$("shareBtn").onclick=shareWA;
-$("scoreBtn").onclick=()=>{show("scoreScreen");$("answerInput").focus()};
-$("evaluateBtn").onclick=evaluate;
-$("backBtn").onclick=()=>show("setupScreen");
-$("scoreBackBtn").onclick=()=>show("gameScreen");
-$("resetBtn").onclick=()=>{show("setupScreen");$("result").innerHTML="";$("answerInput").value=""};
-renderCategories();
+/* ---------- nav / setup wiring ---------- */
+function view(v){
+  ['setup','board','saved','settings'].forEach(id=>$('#'+id).hidden=(id!==v));
+  document.querySelectorAll('nav button').forEach(b=>b.classList.toggle('on',b.dataset.v===v||(v==='board'&&b.dataset.v==='setup')));
+  if(v==='saved')renderSaved();
+  scrollTo(0,0);
+}
+function syncMode(){
+  const m=document.querySelector('[name=mode]:checked').value;
+  $('#modeHelp').textContent=MODES[m];
+  $('#typesWrap').hidden=m!=='mix';
+}
+
+function init(){
+  $('#types').innerHTML=TYPES.map(([v,l])=>`<label><input type="checkbox" value="${v}" checked>${l}</label>`).join('');
+  document.querySelectorAll('[name=mode]').forEach(r=>r.onchange=syncMode);syncMode();
+  $('#goAI').onclick=doAI;
+  $('#goBank').onclick=()=>{const s=brief();assemble(s,buildFromBank(s));toast('Built from built-in prompts')};
+  $('#number').value=store.number;$('#key').value=store.k;$('#model').value=store.model;$('#endpoint').value=store.endpoint;
+  $('#saveSet').onclick=()=>{
+    localStorage.setItem('wa.number',$('#number').value.trim());
+    localStorage.setItem('wa.key',$('#key').value.trim());
+    localStorage.setItem('wa.model',$('#model').value.trim()||'claude-opus-4-8');
+    localStorage.setItem('wa.endpoint',$('#endpoint').value.trim());
+    toast('Settings saved');view('setup');
+  };
+  document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>view(b.dataset.v));
+  view('setup');
+}
+init();

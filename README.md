@@ -1,27 +1,21 @@
 # WA Games
 
-A mobile-first WhatsApp Game Generator MVP.
+A creator-only console for building hidden-prompt games you play **inside a WhatsApp chat**. The app never runs the game and players never open it — it generates the game and hands you copy-ready messages.
 
-## Included
-- Couples, Friends, Trivia, Truth or Dare, Would You Rather, Personality, South Africa and Custom categories
-- Question count and style configuration
-- Question-type filters
-- Generate a game
-- Copy formatted questions
-- Open WhatsApp with the generated message
-- Paste a WhatsApp reply back into the app
-- Automatic scoring for questions with predefined answers
-- PWA manifest for adding to a phone home screen
+## Modes
+- **Pick a Number** — numbers 1–N each hide a prompt. Send the intro, they pick blind, you reveal the full locked list so they know nothing was made up on the spot.
+- **Random Round** — one message deals the prompts in a shuffled order, no number game.
+- **Custom Mix** — choose the exact prompt types, then build the list.
+
+## Features
+- AI generation from a personalised brief (audience, intensity, language: English / isiZulu / Afrikaans / mixed), with per-prompt **regenerate** and **shift tone**.
+- Genuinely shuffled number→prompt mapping each game.
+- **Lock ID** — a fingerprint of the list, sent with the intro and repeated on the reveal as a "locked before you picked" trust signal. It refreshes if you edit a prompt.
+- Copy-ready messages: intro, full-list reveal, single-number lookup, and remaining numbers — formatted with WhatsApp bold/italic, with an optional saved number for direct `wa.me` sends.
+- Saved games stored on-device. Built-in prompt bank works with no key.
+
+## AI key
+Paste your own Anthropic API key in **Settings** (stored on this device only). A browser-held key is fine for personal use. To share the app, set a **Proxy URL** instead — it replaces the direct call and the key, so a hosted endpoint (e.g. a .NET minimal API) can hold the secret.
 
 ## Run
-The simplest way to test it is to serve this folder with any static HTTP server.
-
-Examples:
-- VS Code Live Server
-- `python -m http.server 8080`
-- Any IIS/static hosting
-
-Opening `index.html` directly works for most features, but browser security may restrict clipboard/PWA functionality.
-
-## Next production step
-Add a backend/AI question-generation endpoint and optional database for custom question packs and saved games. Direct WhatsApp API messaging can be added later; the MVP intentionally uses WhatsApp's share link rather than requiring a WhatsApp Business API setup.
+Serve this folder with any static server: `python -m http.server 8080`, VS Code Live Server, or IIS.
