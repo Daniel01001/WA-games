@@ -1,9 +1,15 @@
 {
-  "name": "WA Games - WhatsApp Game Creator",
+  "name": "WA Games — WhatsApp Game Creator",
   "short_name": "WA Games",
+  "description": "Build hidden-prompt games to play in a WhatsApp chat.",
   "start_url": ".",
+  "scope": ".",
   "display": "standalone",
+  "orientation": "portrait",
   "background_color": "#f1eeff",
   "theme_color": "#1f1747",
-  "description": "Build hidden-prompt games to play in a WhatsApp chat."
+  "categories": ["games", "entertainment", "social"],
+  "icons": [
+    { "src": "icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
 }

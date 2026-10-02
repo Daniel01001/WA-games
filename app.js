@@ -42,7 +42,27 @@ const BANK=[
   {t:'question',i:'bold',text:"What's a text you typed to me but never sent?"},
   {t:'confession',i:'playful',text:"Confess your most embarrassing autocorrect moment"},
   {t:'voice',i:'chill',text:"Voice note: your laugh, on demand 😂"},
-  {t:'question',i:'chaos',text:"If we swapped phones for an hour, what are you deleting first?"}
+  {t:'question',i:'chaos',text:"If we swapped phones for an hour, what are you deleting first?"},
+  {t:'question',i:'chill',text:"Coffee, tea, or neither — and how do you take it?"},
+  {t:'choice',i:'playful',text:"Beach day or mountain hike for our first trip?"},
+  {t:'confession',i:'playful',text:"Confess a song you'd be embarrassed to admit you love"},
+  {t:'rating',i:'bold',text:"Rate my texting game out of 10 and tell me how to level up"},
+  {t:'photo',i:'chill',text:"Send a photo of your view right now"},
+  {t:'voice',i:'playful',text:"Voice note: say 'sawubona' like you mean it 😄"},
+  {t:'challenge',i:'playful',text:"Reply to my next message in a different accent (voice note)"},
+  {t:'prediction',i:'bold',text:"Predict where we'll be this time next year"},
+  {t:'question',i:'bold',text:"What's the green flag you noticed about me first?"},
+  {t:'question',i:'playful',text:"Ubuthini uma ucabanga ngami? (What's the first word you think of with me?)"},
+  {t:'choice',i:'chill',text:"Night owl playlist or sunrise playlist — drop one song"},
+  {t:'confession',i:'bold',text:"Confess the last thing you screenshotted from our chat"},
+  {t:'challenge',i:'chaos',text:"Send a 5-second video of your current mood, no words"},
+  {t:'rating',i:'playful',text:"Rate this game idea out of 10, be brutal"},
+  {t:'question',i:'chill',text:"What's your comfort meal after a long day?"},
+  {t:'photo',i:'playful',text:"Send the oldest selfie on your phone 😭"},
+  {t:'prediction',i:'playful',text:"Guess my next three emojis in order"},
+  {t:'confession',i:'chaos',text:"Confess one lie you told just to look cool"},
+  {t:'voice',i:'bold',text:"Voice note: your honest first impression of me"},
+  {t:'question',i:'playful',text:"Takealot cart or sneaker plug — where does your money go?"}
 ];
 
 /* ---------- helpers ---------- */
@@ -261,4 +281,34 @@ function init(){
   document.querySelectorAll('nav button').forEach(b=>b.onclick=()=>view(b.dataset.v));
   view('setup');
 }
+
+/* ---------- PWA install ---------- */
+let deferredPrompt=null;
+const isStandalone=()=>matchMedia('(display-mode: standalone)').matches||navigator.standalone===true;
+const isiOS=()=>/iphone|ipad|ipod/i.test(navigator.userAgent);
+const snoozed=()=>Date.now()-(+localStorage.getItem('wa.installSnooze')||0)<7*864e5;
+function snooze(){localStorage.setItem('wa.installSnooze',Date.now())}
+function showInstall(kind){
+  if(isStandalone()||snoozed())return;
+  let bar=$('#install');
+  if(!bar){bar=document.createElement('div');bar.id='install';bar.className='install';document.body.appendChild(bar)}
+  bar.innerHTML=kind==='ios'
+    ?`<span>Install: tap <b>Share</b> then <b>Add to Home Screen</b></span><button class="x" id="instX" aria-label="Dismiss">✕</button>`
+    :`<span>Add WA Games to your home screen</span><span class="ig"><button class="primary" id="instY">Install</button><button class="x" id="instX" aria-label="Dismiss">✕</button></span>`;
+  requestAnimationFrame(()=>bar.classList.add('show'));
+  $('#instX').onclick=()=>{bar.classList.remove('show');snooze()};
+  const y=$('#instY');
+  if(y)y.onclick=async()=>{
+    if(!deferredPrompt)return;
+    deferredPrompt.prompt();
+    const {outcome}=await deferredPrompt.userChoice;
+    deferredPrompt=null;bar.classList.remove('show');
+    if(outcome!=='accepted')snooze();
+  };
+}
+addEventListener('beforeinstallprompt',e=>{e.preventDefault();deferredPrompt=e;showInstall('android')});
+addEventListener('appinstalled',()=>{const b=$('#install');if(b)b.classList.remove('show');deferredPrompt=null});
+if(isiOS()&&!isStandalone())setTimeout(()=>showInstall('ios'),1600);
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('sw.js').catch(()=>{}));
+
 init();

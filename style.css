@@ -50,3 +50,12 @@ nav button.on{background:var(--sun);color:var(--ink)}
 .toast.show{opacity:1}
 [hidden]{display:none!important}
 @media(prefers-reduced-motion:reduce){*{transition:none!important}}
+*{-webkit-tap-highlight-color:transparent}
+button{touch-action:manipulation}
+.install{position:fixed;left:50%;transform:translateX(-50%) translateY(160%);bottom:calc(84px + env(safe-area-inset-bottom,0px));width:calc(100% - 24px);max-width:600px;background:var(--ink);color:#fff;border-radius:16px;padding:12px 14px;display:flex;align-items:center;justify-content:space-between;gap:10px;box-shadow:0 10px 30px #1f174766;z-index:60;font-size:14px;transition:transform .3s ease}
+.install.show{transform:translateX(-50%) translateY(0)}
+.install b{color:var(--sun);font-weight:700}
+.install .ig{display:flex;gap:8px;align-items:center;flex-shrink:0}
+.install .primary{margin:0;border:0;padding:9px 16px}
+.install .x{background:transparent;border:0;color:#cfc8f5;padding:6px 8px;font-size:16px}
+@media(prefers-reduced-motion:reduce){.install{transition:none}}
